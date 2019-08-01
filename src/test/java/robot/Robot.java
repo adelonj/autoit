@@ -3,7 +3,7 @@ package robot;
 /**
  * Created by delonj on 17/07/2019.
  */
-public class Robot {
+public class Robot implements RobotConnection {
     private int x;
     private int y;
     private Direction direction;
@@ -14,42 +14,61 @@ public class Robot {
         this.direction = direction;
     }
 
-    public Direction getDirection() {
+    Direction getDirection() {
         return direction;
     }
 
-    public int getX() {
+    int getX() {
         return x;
     }
 
-    public int getY() {
+    int getY() {
         return y;
     }
 
-    public void turnLeft() {
-        System.out.println("Поворот против часовой стрелки");
-        if (direction == Direction.DOWN) {
-            this.direction = Direction.RIGHT;
-            return;
+
+    @Override
+    public void close() {
+        System.out.println("close connection");
+
+    }
+
+    @Override
+    public void moveRobotTo(int toX, int toY) {
+        if (x == 10)
+            throw new RuntimeException("aaaaqqq");
+        if (getY() != toY) {
+            if (toY > getY()) {
+                while (getDirection() != Direction.UP)
+                    turnRight();
+                while (toY != getY())
+                    stepForward();
+
+            } else {
+                while (getDirection() != Direction.DOWN)
+                    turnRight();
+                while (toY != getY())
+                    stepForward();
+            }
         }
 
-        if (direction == Direction.UP) {
-            this.direction = Direction.LEFT;
-            return;
-        }
-
-        if (direction == Direction.LEFT) {
-            this.direction = Direction.DOWN;
-            return;
-        }
-
-        if (direction == Direction.RIGHT) {
-            this.direction = Direction.UP;
-            return;
+        if (getX() != toX) {
+            if (toX > getX()) {
+                while (getDirection() != Direction.RIGHT)
+                    turnRight();
+                while (toX != getX()) {
+                    stepForward();
+                }
+            } else {
+                while (getDirection() != Direction.LEFT)
+                    turnRight();
+                while (getX() != toX)
+                    stepForward();
+            }
         }
     }
 
-    public void turnRight() {
+    private void turnRight() {
         System.out.println("поворот по часовой стрелке");
         if (this.direction == Direction.DOWN) {
             System.out.println("Вниз -> влево");
@@ -76,7 +95,7 @@ public class Robot {
         }
     }
 
-    public void stepForward() {
+    private void stepForward() {
         if (direction == Direction.DOWN) {
             System.out.println("вниз");
             this.y--;
