@@ -20,22 +20,38 @@ public class Main {
 // System.out.println("x=" + robot.getX() + " y=" + robot.getY());
         RobotConnectionManager manager = new RobotConnectionManagerImpl(1, 3, Direction.UP);
 
-        RobotConnection connection = new Robot(10, 3, Direction.UP);
-        int i = 0;
-        while (i != 3)
-            try {
-                connection = manager.getConnection();
-                connection.moveRobotTo(10, 4);
-                break;
-            } catch (RobotConnectionException e) {
-                i++;
-                System.out.println(i + " = попытка");
-            } finally {
-                if (connection != null)
-                    connection.close();
-            }
+        moveRobot(manager, 1, 4);
 
     }
 
+    //    public static void moveRobot(RobotConnectionManager robotConnectionManager, int toX, int toY) {
+//        RobotConnection connection = null;
+//        int i = 0;
+//        while (i < 3)
+//            try {
+//                connection = robotConnectionManager.getConnection();
+//                connection.moveRobotTo(toX, toY);
+//                i=3;
+//            } catch (RobotConnectionException e) {
+//                i++;
+//                if(i==3)
+//                    throw new RobotConnectionException(e.getMessage());
+//            } finally {
+//                if (connection != null)
+//                    connection.close();
 
+    //            }
+//    }
+    public static void moveRobot(RobotConnectionManager robotConnectionManager, int toX, int toY) {
+        for (int i = 0; i < 3; ) {
+            try (RobotConnection connection = robotConnectionManager.getConnection()) {
+                connection.moveRobotTo(toX, toY);
+                i = 3;
+            } catch (RobotConnectionException e) {
+                if (i == 2)
+                    throw new RobotConnectionException(e.getMessage());
+                i++;
+            }
+        }
+    }
 }

@@ -5,7 +5,7 @@ package robot;
  */
 public class RobotConnectionManagerImpl implements RobotConnectionManager {
     private Robot robot;
-    private int i = 2;
+    private int i = 10;
 
 
     public RobotConnectionManagerImpl(int x,int y,Direction direction) {
@@ -14,11 +14,14 @@ public class RobotConnectionManagerImpl implements RobotConnectionManager {
     }
 
     @Override
-    public RobotConnection getConnection() {
+    public RobotConnection getConnection()  {
         System.out.println("start connection");
         if(i>2) {
             i--;
-             throw new RobotConnectionException("something wrong");
+            System.out.println("fail connection");
+
+            //throw new RobotConnectionException("something wrong");
+            throw new RuntimeException("runtime error");
         }
         return robot;
     }
